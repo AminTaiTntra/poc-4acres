@@ -1,0 +1,39 @@
+-- V2__seed_patches.sql
+-- Seed 10 geospatial patches with pre-computed 127m × 127m boundaries
+--
+-- Boundary calculation:
+--   delta_lat = 0.0005705° (constant, equivalent to ~127m at equator)
+--   delta_lng = 0.0005705° / cos(lat_radians) (varies by latitude)
+-- Each polygon is a clockwise square: SW → SE → NE → NW → SW (closed)
+
+INSERT INTO patches (name, ecosystem_type, country, center_lat, center_lng, boundary) VALUES
+
+('Amazon Várzea Forest', 'FOREST', 'Brazil', -3.4653, -62.2159,
+  ST_GeomFromText('POLYGON((-62.2165706 -3.4658705,-62.2152294 -3.4658705,-62.2152294 -3.4647295,-62.2165706 -3.4647295,-62.2165706 -3.4658705))', 4326)),
+
+('Sundarbans Mangrove', 'WETLAND', 'Bangladesh', 21.9497, 89.1833,
+  ST_GeomFromText('POLYGON((89.1826852 21.9491295,89.1839148 21.9491295,89.1839148 21.9502705,89.1826852 21.9502705,89.1826852 21.9491295))', 4326)),
+
+('Maasai Mara Savanna', 'SAVANNA', 'Kenya', -1.5442, 35.1042,
+  ST_GeomFromText('POLYGON((35.1035694 -1.5447705,35.1048306 -1.5447705,35.1048306 -1.5436295,35.1035694 -1.5436295,35.1035694 -1.5447705))', 4326)),
+
+('Cairngorms Highland', 'HIGHLAND', 'Scotland', 57.1230, -3.8940,
+  ST_GeomFromText('POLYGON((-3.8951537 57.1224295,-3.8928463 57.1224295,-3.8928463 57.1235705,-3.8951537 57.1235705,-3.8951537 57.1224295))', 4326)),
+
+('Borneo Rainforest', 'FOREST', 'Malaysia', 2.1896, 113.9944,
+  ST_GeomFromText('POLYGON((113.9937696 2.1890295,113.9950304 2.1890295,113.9950304 2.1901705,113.9937696 2.1901705,113.9937696 2.1890295))', 4326)),
+
+('Daintree Rainforest', 'FOREST', 'Australia', -16.1700, 145.4200,
+  ST_GeomFromText('POLYGON((145.4193076 -16.1705705,145.4206924 -16.1705705,145.4206924 -16.1694295,145.4193076 -16.1694295,145.4193076 -16.1705705))', 4326)),
+
+('Yellowstone Forest', 'FOREST', 'USA', 44.4280, -110.5885,
+  ST_GeomFromText('POLYGON((-110.5893005 44.4274295,-110.5876995 44.4274295,-110.5876995 44.4285705,-110.5893005 44.4285705,-110.5893005 44.4274295))', 4326)),
+
+('Sahel Dryland', 'DRYLAND', 'Mali', 14.8833, -5.0000,
+  ST_GeomFromText('POLYGON((-5.0005912 14.8827295,-4.9994088 14.8827295,-4.9994088 14.8838705,-5.0005912 14.8838705,-5.0005912 14.8827295))', 4326)),
+
+('Białowieża Primeval Forest', 'FOREST', 'Poland', 52.7069, 23.8601,
+  ST_GeomFromText('POLYGON((23.8594139 52.7063295,23.8607861 52.7063295,23.8607861 52.7074705,23.8594139 52.7074705,23.8594139 52.7063295))', 4326)),
+
+('Patagonian Steppe', 'HIGHLAND', 'Argentina', -50.3498, -72.2660,
+  ST_GeomFromText('POLYGON((-72.2668902 -50.3503705,-72.2651098 -50.3503705,-72.2651098 -50.3492295,-72.2668902 -50.3492295,-72.2668902 -50.3503705))', 4326));
