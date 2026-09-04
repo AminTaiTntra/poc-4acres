@@ -1,7 +1,6 @@
 package io.fouracres.dto;
 
 import io.fouracres.model.Patch;
-import org.locationtech.jts.geom.Coordinate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;

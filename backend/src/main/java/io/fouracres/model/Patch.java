@@ -54,4 +54,16 @@ public class Patch {
     public Polygon getBoundary() { return boundary; }
     public BigDecimal getAreaAcres() { return areaAcres; }
     public String getGfwGeostoreId() { return gfwGeostoreId; }
+
+    // Setters
+    public void setId(UUID id) { this.id = id; }
+    public void setName(String name) { this.name = name; }
+    public void setEcosystemType(EcosystemType ecosystemType) { this.ecosystemType = ecosystemType; }
+    public void setCountry(String country) { this.country = country; }
+    public void setDescription(String description) { this.description = description; }
+    public void setCenterLat(BigDecimal centerLat) { this.centerLat = centerLat; }
+    public void setCenterLng(BigDecimal centerLng) { this.centerLng = centerLng; }
+    public void setBoundary(Polygon boundary) { this.boundary = boundary; }
+    public void setAreaAcres(BigDecimal areaAcres) { this.areaAcres = areaAcres; }
+    public void setGfwGeostoreId(String gfwGeostoreId) { this.gfwGeostoreId = gfwGeostoreId; }
 }

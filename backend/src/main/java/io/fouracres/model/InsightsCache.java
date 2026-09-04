@@ -36,6 +36,8 @@ public class InsightsCache {
         this.expiresAt = expiresAt;
     }
 
+    public UUID getPatchId() { return patchId; }
+    public String getLayer() { return layer; }
     public String getPayload() { return payload; }
     public Instant getExpiresAt() { return expiresAt; }
 }
