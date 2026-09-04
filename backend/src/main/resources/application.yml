@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/fouracres}
+    username: ${SPRING_DATASOURCE_USERNAME:fouracres}
+    password: ${SPRING_DATASOURCE_PASSWORD:fouracres_dev}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+server:
+  port: 8080
+
+app:
+  gfw:
+    api-key: ${GFW_API_KEY:}
+    base-url: https://data-api.globalforestwatch.org
+  gbif:
+    base-url: https://api.gbif.org/v1
+  soilgrids:
+    base-url: https://rest.soilgrids.org

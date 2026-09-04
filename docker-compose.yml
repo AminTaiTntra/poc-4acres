@@ -1,0 +1,38 @@
+services:
+  db:
+    image: postgis/postgis:15-3.4
+    environment:
+      POSTGRES_DB: fouracres
+      POSTGRES_USER: fouracres
+      POSTGRES_PASSWORD: fouracres_dev
+    ports: ["5432:5432"]
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fouracres -d fouracres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build: ./backend
+    ports: ["8080:8080"]
+    env_file: .env
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/fouracres
+      SPRING_DATASOURCE_USERNAME: fouracres
+      SPRING_DATASOURCE_PASSWORD: fouracres_dev
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build: ./frontend
+    ports: ["3000:3000"]
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8080
+      NEXT_PUBLIC_MAPBOX_TOKEN: ${MAPBOX_TOKEN}
+    depends_on: [api]
+
+volumes:
+  pgdata:
