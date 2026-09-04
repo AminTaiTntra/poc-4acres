@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Run once: node scripts/register-gfw-geostores.js
-// Requires: GFW_API_KEY env var, node-fetch (npm i -g node-fetch or use Node 18+)
+// Requires: GFW_API_KEY env var, Node 18+
 
 const GFW_API_KEY = process.env.GFW_API_KEY;
 if (!GFW_API_KEY) { console.error('GFW_API_KEY required'); process.exit(1); }
