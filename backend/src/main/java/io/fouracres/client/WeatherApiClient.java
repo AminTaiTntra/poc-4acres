@@ -18,7 +18,7 @@ import java.util.List;
 public class WeatherApiClient {
 
     private static final WeatherData DEFAULT =
-        new WeatherData(0, "Unavailable", "", 0, 0, 0, List.of());
+        new WeatherData(0, "Unknown", "", 0, 0, 0, List.of());
 
     private final HttpClient httpClient;
     private final String baseUrl;

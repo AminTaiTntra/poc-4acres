@@ -81,7 +81,7 @@ class WeatherApiClientTest {
         var client = new WeatherApiClient(httpClient, "https://api.weatherapi.com", "test-key");
         WeatherData result = client.fetch(mockPatch(0, 0));
 
-        assertThat(result.condition()).isEqualTo("Unavailable");
+        assertThat(result.condition()).isEqualTo("Unknown");
         assertThat(result.forecast()).isEmpty();
     }
 
