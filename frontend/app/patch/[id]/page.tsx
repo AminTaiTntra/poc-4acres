@@ -62,8 +62,8 @@ export default function PatchPage() {
       {/* New integrations row — above existing strip */}
       <div className="absolute bottom-36 left-4 right-4 z-10 flex gap-3">
         <GeographicContextCard data={insights?.geographicContext ?? null} className="flex-1" />
-        <WeatherCard insights={insights} className="flex-1" />
-        <SatelliteCard insights={insights} className="flex-1" />
+        <WeatherCard data={insights?.weather ?? null} className="flex-1" />
+        <SatelliteCard data={insights?.satellite ?? null} className="flex-1" />
       </div>
 
       {/* Existing metrics row — bottom */}

@@ -1,42 +1,40 @@
 'use client'
 
-import type { PatchInsights } from '../lib/types'
+import type { WeatherData } from '../lib/types'
 
 const GLASS = 'bg-black/60 backdrop-blur-md border border-white/10 rounded-xl p-4 text-white'
 
 interface Props {
-  insights: PatchInsights | undefined
+  data: WeatherData | null
   className?: string
 }
 
-export function WeatherCard({ insights, className }: Props) {
-  const weather = insights?.weather
-
+export function WeatherCard({ data, className }: Props) {
   return (
     <div className={`${GLASS} ${className ?? ''}`}>
       <p className="text-xs font-semibold text-sky-400 mb-2">☁️ Weather</p>
-      {weather && weather.condition !== 'Unavailable' ? (
+      {data && data.condition !== 'Unknown' ? (
         <>
           <div className="flex items-center gap-2 mb-2">
-            {weather.conditionIconUrl && (
+            {data.conditionIconUrl && (
               <img
-                src={weather.conditionIconUrl}
-                alt={weather.condition}
+                src={data.conditionIconUrl}
+                alt={data.condition}
                 className="w-8 h-8 flex-shrink-0"
               />
             )}
             <div>
-              <p className="text-xl font-bold leading-none">{weather.tempC.toFixed(1)}°C</p>
-              <p className="text-slate-400 text-xs mt-0.5">{weather.condition}</p>
+              <p className="text-xl font-bold leading-none">{data.tempC.toFixed(1)}°C</p>
+              <p className="text-slate-400 text-xs mt-0.5">{data.condition}</p>
             </div>
           </div>
           <div className="flex gap-3 text-slate-500 text-xs mb-3">
-            <span>💨 {weather.windKph.toFixed(0)} km/h</span>
-            <span>💧 {weather.humidity}%</span>
-            <span>UV {weather.uvIndex.toFixed(0)}</span>
+            <span>💨 {data.windKph.toFixed(0)} km/h</span>
+            <span>💧 {data.humidity}%</span>
+            <span>UV {data.uvIndex.toFixed(0)}</span>
           </div>
           <div className="flex gap-2 overflow-x-auto pb-0.5">
-            {weather.forecast.map(day => {
+            {data.forecast.map(day => {
               const label = new Date(day.date + 'T12:00:00')
                 .toLocaleDateString('en', { weekday: 'short' })
               return (
