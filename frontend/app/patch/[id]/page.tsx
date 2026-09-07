@@ -4,6 +4,9 @@ import dynamic from 'next/dynamic'
 import { useParams } from 'next/navigation'
 import { usePatch, useInsights, useClaim } from '../../lib/queries'
 import { PatchInfoCard } from '../../components/PatchInfoCard'
+import { GeographicContextCard } from '../../components/GeographicContextCard'
+import { WeatherCard } from '../../components/WeatherCard'
+import { SatelliteCard } from '../../components/SatelliteCard'
 
 const MyPatchMap = dynamic(
   () => import('../../components/MyPatchMap').then(m => ({ default: m.MyPatchMap })),
@@ -56,7 +59,14 @@ export default function PatchPage() {
         <PatchInfoCard type="identity" patch={patch} claim={claim} />
       </div>
 
-      {/* Metrics strip — bottom */}
+      {/* New integrations row — above existing strip */}
+      <div className="absolute bottom-36 left-4 right-4 z-10 flex gap-3">
+        <GeographicContextCard data={insights?.geographicContext ?? null} className="flex-1" />
+        <WeatherCard insights={insights} className="flex-1" />
+        <SatelliteCard insights={insights} className="flex-1" />
+      </div>
+
+      {/* Existing metrics row — bottom */}
       <div className="absolute bottom-6 left-4 right-4 z-10 flex gap-3">
         <PatchInfoCard type="biodiversity" insights={insights} className="flex-1" />
         <PatchInfoCard type="soil" insights={insights} className="flex-1" />
