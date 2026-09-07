@@ -50,7 +50,7 @@ public class GfwClient {
         JsonNode row = data.get(0);
         double coverHa = row.path("umd_tree_cover_density_2020__ha").asDouble(0);
         double patchHa = 4 * ACRES_TO_HA;
-        double treeCoverPercent = patchHa > 0 ? (coverHa / patchHa) * 100 : 0;
+        double treeCoverPercent = patchHa > 0 ? Math.min(100, (coverHa / patchHa) * 100) : 0;
         double carbonDensity = row.path("gfw_aboveground_carbon_stocks_2000__Mg_C_ha-1").asDouble(0);
         double coverLoss = row.path("umd_tree_cover_loss__ha").asDouble(0);
         return new CarbonData(treeCoverPercent, carbonDensity, coverLoss);
