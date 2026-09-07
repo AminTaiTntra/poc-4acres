@@ -20,17 +20,11 @@ const patches = [
 
 async function register(patch) {
   const body = {
-    geojson: {
-      type: 'FeatureCollection',
-      features: [{
-        type: 'Feature',
-        geometry: { type: 'Polygon', coordinates: [patch.coords] },
-        properties: {}
-      }]
-    }
+    geometry: { type: 'Polygon', coordinates: [patch.coords] },
   };
-  const res = await fetch('https://data-api.globalforestwatch.org/dataset/geostore', {
+  const res = await fetch('https://data-api.globalforestwatch.org/geostore', {
     method: 'POST',
+    redirect: 'follow',
     headers: {
       'Content-Type': 'application/json',
       'x-api-key': GFW_API_KEY,
@@ -39,7 +33,7 @@ async function register(patch) {
   });
   const json = await res.json();
   if (!res.ok) throw new Error(`GFW error for ${patch.name}: ${JSON.stringify(json)}`);
-  return json.data?.id || json.geostore_id;
+  return json.data?.gfw_geostore_id;
 }
 
 (async () => {
