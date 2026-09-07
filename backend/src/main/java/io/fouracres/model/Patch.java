@@ -40,6 +40,13 @@ public class Patch {
     @Column(name = "gfw_geostore_id", length = 100)
     private String gfwGeostoreId;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private PatchStatus status = PatchStatus.AVAILABLE;
+
+    @Column(name = "owner_name", length = 255)
+    private String ownerName;
+
     @Column(name = "created_at")
     private Instant createdAt = Instant.now();
 
@@ -54,6 +61,8 @@ public class Patch {
     public Polygon getBoundary() { return boundary; }
     public BigDecimal getAreaAcres() { return areaAcres; }
     public String getGfwGeostoreId() { return gfwGeostoreId; }
+    public PatchStatus getStatus() { return status; }
+    public String getOwnerName() { return ownerName; }
 
     // Setters
     public void setId(UUID id) { this.id = id; }
@@ -66,4 +75,6 @@ public class Patch {
     public void setBoundary(Polygon boundary) { this.boundary = boundary; }
     public void setAreaAcres(BigDecimal areaAcres) { this.areaAcres = areaAcres; }
     public void setGfwGeostoreId(String gfwGeostoreId) { this.gfwGeostoreId = gfwGeostoreId; }
+    public void setStatus(PatchStatus status) { this.status = status; }
+    public void setOwnerName(String ownerName) { this.ownerName = ownerName; }
 }
