@@ -39,9 +39,14 @@ export function PatchInfoCard(props: Props) {
           </p>
         )}
         {claim ? (
-          <p className="text-slate-300 text-xs">
-            <span className="text-slate-500">Steward</span> {claim.stewardName}
-          </p>
+          <>
+            <p className="text-slate-300 text-xs mb-1">
+              <span className="text-slate-500">Steward</span> {claim.stewardName}
+            </p>
+            <p className="text-slate-500 text-xs">
+              Claimed {new Date(claim.claimedAt).toLocaleDateString()}
+            </p>
+          </>
         ) : (
           <p className="text-slate-500 text-xs">Unclaimed — visit /explore to claim</p>
         )}

@@ -18,7 +18,7 @@ export default function RegisterPage() {
     name: '', ownerName: '', country: '', ecosystemType: 'FOREST', description: '',
   })
   const [error, setError] = useState('')
-  const [registered, setRegistered] = useState(false)
+  const [registeredName, setRegisteredName] = useState<string | null>(null)
   const { mutate: register, isPending } = useRegisterPatch()
 
   function handleSubmit(e: React.FormEvent) {
@@ -28,7 +28,7 @@ export default function RegisterPage() {
     register(
       { ...form, boundary: { type: 'Polygon', coordinates: [coords] } },
       {
-        onSuccess: () => setRegistered(true),
+        onSuccess: (patch) => setRegisteredName(patch.name),
         onError: (err) => setError(err instanceof Error ? err.message : 'Registration failed'),
       }
     )
@@ -48,13 +48,13 @@ export default function RegisterPage() {
           </p>
         </div>
 
-        {registered ? (
+        {registeredName !== null ? (
           <div className="p-6 flex flex-col gap-4">
             <div className="bg-black/70 backdrop-blur-md border border-white/10 rounded-xl p-6 flex flex-col items-center gap-4 text-center">
               <div className="text-4xl">🌿</div>
-              <h2 className="text-lg font-semibold text-white">Land Registered!</h2>
+              <h2 className="text-lg font-semibold text-white">{registeredName}</h2>
               <p className="text-slate-400 text-sm">
-                Your patch has been successfully registered on the 4Acres Earth network.
+                Successfully registered on the 4Acres Earth network.
               </p>
               <Link
                 href="/explore"
@@ -128,7 +128,7 @@ export default function RegisterPage() {
 
       {/* Map */}
       <div className="flex-1 relative">
-        {!coords && !registered && (
+        {!coords && registeredName === null && (
           <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 bg-black/70 backdrop-blur-sm text-white text-sm px-4 py-2 rounded-full pointer-events-none">
             Use the polygon tool (top-right of map) to draw your land boundary
           </div>
