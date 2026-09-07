@@ -1,3 +1,5 @@
+// frontend/app/lib/types.ts
+
 export interface SpeciesEntry {
   name: string
   kingdom: string
@@ -21,10 +23,47 @@ export interface CarbonData {
   coverLossHa: number
 }
 
+export interface GeographicContextData {
+  placeName: string
+  neighborhood: string | null
+  city: string
+  region: string
+  country: string
+  fullAddress: string
+}
+
+export interface ForecastDay {
+  date: string
+  maxTempC: number
+  minTempC: number
+  condition: string
+}
+
+export interface WeatherData {
+  tempC: number
+  condition: string
+  conditionIconUrl: string
+  windKph: number
+  humidity: number
+  uvIndex: number
+  forecast: ForecastDay[]
+}
+
+export interface SatelliteSceneData {
+  hasRecentScene: boolean
+  latestSceneDate: string | null
+  cloudCoverPercent: number
+  productType: string | null
+  thumbnailUrl: string | null
+}
+
 export interface PatchInsights {
   biodiversity: BiodiversityData
   soil: SoilData
   carbon: CarbonData
+  geographicContext: GeographicContextData | null
+  weather: WeatherData | null
+  satellite: SatelliteSceneData | null
 }
 
 export interface BoundaryGeoJson {
