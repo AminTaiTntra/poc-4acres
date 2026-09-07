@@ -139,7 +139,10 @@ class PatchControllerTest {
         var insights = new PatchInsightsDto(
             new BiodiversityData(42, List.of(), 3),
             new SoilData(21.5, 5.7, 32.4),
-            new CarbonData(35.0, 210.5, 0.08)
+            new CarbonData(35.0, 210.5, 0.08),
+            null,
+            null,
+            null
         );
         when(insightsService.getInsights(id)).thenReturn(insights);
 

@@ -70,7 +70,7 @@ public class InsightsService {
         saveCache(patchId, "SOIL", soil, expires);
         saveCache(patchId, "CARBON", carbon, expires);
 
-        return new PatchInsightsDto(bio, soil, carbon);
+        return new PatchInsightsDto(bio, soil, carbon, null, null, null);
     }
 
     private void saveCache(UUID patchId, String layer, Object data, Instant expires) {
@@ -85,7 +85,10 @@ public class InsightsService {
             return new PatchInsightsDto(
                 mapper.readValue(bio.getPayload(), BiodiversityData.class),
                 mapper.readValue(soil.getPayload(), SoilData.class),
-                mapper.readValue(carbon.getPayload(), CarbonData.class)
+                mapper.readValue(carbon.getPayload(), CarbonData.class),
+                null,
+                null,
+                null
             );
         } catch (Exception e) {
             throw new RuntimeException("Cache deserialization failed", e);
