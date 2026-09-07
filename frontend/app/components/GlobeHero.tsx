@@ -1,6 +1,6 @@
 'use client'
 
-import Map, { Source, Layer, Marker } from 'react-map-gl'
+import Map, { Marker } from 'react-map-gl'
 import { useEffect, useRef } from 'react'
 import type { MapRef } from 'react-map-gl'
 import type { Patch } from '../lib/types'

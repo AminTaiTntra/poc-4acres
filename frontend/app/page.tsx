@@ -1,7 +1,4 @@
 import Link from 'next/link'
-import { Suspense } from 'react'
-
-// GlobeHero is client-only (uses Mapbox); wrapped in Suspense
 import dynamic from 'next/dynamic'
 const GlobeHero = dynamic(
   () => import('./components/GlobeHero').then(m => ({ default: m.GlobeHero })),
