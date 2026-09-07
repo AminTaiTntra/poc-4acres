@@ -12,7 +12,9 @@ public record PatchDto(
     String country,
     double centerLat,
     double centerLng,
-    Object boundaryGeoJson
+    Object boundaryGeoJson,
+    String status,
+    String ownerName
 ) {
     public static PatchDto from(Patch p) {
         var coords = Arrays.stream(p.getBoundary().getCoordinates())
@@ -29,7 +31,9 @@ public record PatchDto(
             p.getCountry(),
             p.getCenterLat().doubleValue(),
             p.getCenterLng().doubleValue(),
-            geojson
+            geojson,
+            p.getStatus().name(),
+            p.getOwnerName()
         );
     }
 }
