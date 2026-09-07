@@ -74,6 +74,10 @@ public class MapboxGeocodingClient {
         if ("place".equals(placeType) && "Unknown".equals(city)) {
             city = placeName;
         }
+        // If the top feature IS a neighborhood, it is the neighborhood name
+        if ("neighborhood".equals(placeType) && neighborhood == null) {
+            neighborhood = placeName;
+        }
 
         return new GeographicContextData(placeName, neighborhood, city, region, country, fullAddress);
     }
