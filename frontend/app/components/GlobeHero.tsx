@@ -42,6 +42,7 @@ export function GlobeHero({ patches }: Props) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       fog={globeFog as any}
       onLoad={startRotation}
+      onError={e => { if (!e.error?.message?.includes('LngLat')) console.error(e) }}
       interactiveLayerIds={[]}
     >
       {patches.map(p => (
