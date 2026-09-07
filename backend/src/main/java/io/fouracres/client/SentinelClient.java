@@ -34,7 +34,7 @@ public class SentinelClient {
     public SatelliteSceneData fetch(Patch patch) {
         BigDecimal lat    = patch.getCenterLat();
         BigDecimal lng    = patch.getCenterLng();
-        BigDecimal offset = new BigDecimal("0.1");
+        BigDecimal offset = new BigDecimal("0.05");
 
         String bbox = "%s,%s,%s,%s".formatted(
             lng.subtract(offset).toPlainString(),
@@ -43,7 +43,7 @@ public class SentinelClient {
             lat.add(offset).toPlainString());
 
         Instant now = Instant.now().truncatedTo(ChronoUnit.SECONDS);
-        String dateRange = now.minus(30, ChronoUnit.DAYS) + "/" + now;
+        String dateRange = now.minus(90, ChronoUnit.DAYS) + "/" + now;
 
         String url = "%s/stac/collections/SENTINEL-2/items?bbox=%s&datetime=%s&limit=5&sortby=-datetime"
             .formatted(baseUrl, bbox, dateRange);
