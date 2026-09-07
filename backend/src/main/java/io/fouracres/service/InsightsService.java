@@ -9,6 +9,7 @@ import io.fouracres.model.Patch;
 import io.fouracres.repository.InsightsCacheRepository;
 import io.fouracres.repository.PatchRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -18,6 +19,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 @Service
+@Transactional
 public class InsightsService {
 
     private final PatchRepository patchRepository;
