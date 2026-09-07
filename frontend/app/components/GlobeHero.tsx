@@ -9,6 +9,9 @@ interface Props {
   patches: Patch[]
 }
 
+const globeProjection = { name: 'globe' }
+const globeFog = { color: '#0a1628', 'high-color': '#1a3a6b', 'horizon-blend': 0.02 }
+
 export function GlobeHero({ patches }: Props) {
   const mapRef = useRef<MapRef>(null)
   const animRef = useRef<number>(0)
@@ -34,12 +37,10 @@ export function GlobeHero({ patches }: Props) {
       initialViewState={{ longitude: 0, latitude: 20, zoom: 1.5 }}
       style={{ width: '100%', height: '100vh' }}
       mapStyle="mapbox://styles/mapbox/satellite-v9"
-      projection={{ name: 'globe' } as any}
-      fog={{
-        color: '#0a1628',
-        'high-color': '#1a3a6b',
-        'horizon-blend': 0.02,
-      } as any}
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      projection={globeProjection as any}
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      fog={globeFog as any}
       onLoad={startRotation}
       interactiveLayerIds={[]}
     >
