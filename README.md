@@ -149,3 +149,4 @@ Expected until Step 4 (GFW registration). The GfwClient silently returns zeros w
 
 **Insights load slowly on first click**  
 Normal — the backend fetches GBIF, SoilGrids, and GFW in parallel. Subsequent loads are instant (24h cache).
+# poc-4acres
