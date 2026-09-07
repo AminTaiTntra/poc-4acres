@@ -5,6 +5,8 @@ import dynamic from 'next/dynamic'
 import { usePatches } from '../lib/queries'
 import { PatchSidebar } from '../components/PatchSidebar'
 import { InsightsDrawer } from '../components/InsightsDrawer'
+import { ClaimModal } from '../components/ClaimModal'
+import type { Patch } from '../lib/types'
 
 const PatchMap = dynamic(
   () => import('../components/PatchMap').then(m => ({ default: m.PatchMap })),
@@ -13,6 +15,7 @@ const PatchMap = dynamic(
 
 export default function ExplorePage() {
   const [selectedPatchId, setSelectedPatchId] = useState<string | null>(null)
+  const [claimTarget, setClaimTarget] = useState<Patch | null>(null)
   const { data: patches = [], isLoading } = usePatches()
 
   const selectedPatch = patches.find(p => p.id === selectedPatchId)
@@ -31,6 +34,7 @@ export default function ExplorePage() {
         patches={patches}
         selectedPatchId={selectedPatchId}
         onSelect={setSelectedPatchId}
+        onClaim={setClaimTarget}
       />
       <div className="flex-1 relative">
         <PatchMap
@@ -43,6 +47,12 @@ export default function ExplorePage() {
         patchId={selectedPatchId}
         patchName={selectedPatch?.name ?? ''}
       />
+      {claimTarget && (
+        <ClaimModal
+          patch={claimTarget}
+          onClose={() => setClaimTarget(null)}
+        />
+      )}
     </div>
   )
 }

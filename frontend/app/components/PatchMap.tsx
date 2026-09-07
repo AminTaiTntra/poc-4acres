@@ -20,7 +20,7 @@ export function PatchMap({ patches, selectedPatchId, onPatchSelect }: Props) {
     features: patches.map(p => ({
       type: 'Feature',
       id: p.id,
-      properties: { id: p.id, name: p.name, selected: p.id === selectedPatchId },
+      properties: { id: p.id, name: p.name, selected: p.id === selectedPatchId, status: p.status },
       geometry: p.boundaryGeoJson as Polygon,
     })),
   }
@@ -56,12 +56,13 @@ export function PatchMap({ patches, selectedPatchId, onPatchSelect }: Props) {
             'fill-color': [
               'case',
               ['==', ['get', 'selected'], true], '#10b981',
-              '#6ee7b7',
+              ['==', ['get', 'status'], 'AVAILABLE'], '#f59e0b',
+              '#10b981',
             ],
             'fill-opacity': [
               'case',
               ['==', ['get', 'selected'], true], 0.5,
-              0.25,
+              0.3,
             ],
           }}
         />
