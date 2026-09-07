@@ -1,0 +1,7 @@
+/app/src/test/java/io/fouracres/client/GbifClientTest.java
+/app/src/test/java/io/fouracres/client/GfwClientTest.java
+/app/src/test/java/io/fouracres/client/SoilGridsClientTest.java
+/app/src/test/java/io/fouracres/controller/ClaimControllerTest.java
+/app/src/test/java/io/fouracres/controller/PatchControllerTest.java
+/app/src/test/java/io/fouracres/service/ClaimServiceTest.java
+/app/src/test/java/io/fouracres/service/InsightsServiceTest.java
