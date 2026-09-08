@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import { usePatches } from '../lib/queries'
 import { PatchSidebar } from '../components/PatchSidebar'
@@ -14,11 +15,21 @@ const PatchMap = dynamic(
 )
 
 export default function ExplorePage() {
+  const router = useRouter()
   const [selectedPatchId, setSelectedPatchId] = useState<string | null>(null)
   const [claimTarget, setClaimTarget] = useState<Patch | null>(null)
   const { data: patches = [], isLoading } = usePatches()
 
   const selectedPatch = patches.find(p => p.id === selectedPatchId)
+
+  function handlePatchSelect(id: string) {
+    const patch = patches.find(p => p.id === id)
+    if (patch?.status === 'CLAIMED') {
+      router.push(`/patch/${id}`)
+    } else {
+      setSelectedPatchId(id)
+    }
+  }
 
   if (isLoading) {
     return (
@@ -40,7 +51,7 @@ export default function ExplorePage() {
         <PatchMap
           patches={patches}
           selectedPatchId={selectedPatchId}
-          onPatchSelect={setSelectedPatchId}
+          onPatchSelect={handlePatchSelect}
         />
       </div>
       <InsightsDrawer

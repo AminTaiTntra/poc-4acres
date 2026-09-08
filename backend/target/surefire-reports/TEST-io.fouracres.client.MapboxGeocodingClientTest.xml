@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="io.fouracres.service.ClaimServiceTest" time="0.065" tests="4" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="io.fouracres.client.MapboxGeocodingClientTest" time="0.019" tests="4" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="21"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -55,8 +55,8 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="65.0"/>
   </properties>
-  <testcase name="claimPatch_alreadyClaimed_throws409" classname="io.fouracres.service.ClaimServiceTest" time="0.054"/>
-  <testcase name="claimPatch_success_returnsClaimDtoAndMarksClaimed" classname="io.fouracres.service.ClaimServiceTest" time="0.004"/>
-  <testcase name="registerPatch_createsPatchWithAvailableStatus" classname="io.fouracres.service.ClaimServiceTest" time="0.003"/>
-  <testcase name="claimPatch_notFound_throws404" classname="io.fouracres.service.ClaimServiceTest" time="0.001"/>
+  <testcase name="fetch_returnsDefault_onEmptyFeatures" classname="io.fouracres.client.MapboxGeocodingClientTest" time="0.006"/>
+  <testcase name="fetch_parsesPlaceWithRegionAndCountry" classname="io.fouracres.client.MapboxGeocodingClientTest" time="0.004"/>
+  <testcase name="fetch_parsesNeighborhoodWithCity" classname="io.fouracres.client.MapboxGeocodingClientTest" time="0.003"/>
+  <testcase name="fetch_returnsDefault_onHttpError" classname="io.fouracres.client.MapboxGeocodingClientTest" time="0.003"/>
 </testsuite>
