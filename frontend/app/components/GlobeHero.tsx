@@ -27,14 +27,7 @@ export function GlobeHero({ patches }: Props) {
   }
 
   useEffect(() => {
-    const suppressGlobeNaN = (e: ErrorEvent) => {
-      if (e.message?.includes('Invalid LngLat')) e.preventDefault()
-    }
-    window.addEventListener('error', suppressGlobeNaN)
-    return () => {
-      window.removeEventListener('error', suppressGlobeNaN)
-      cancelAnimationFrame(animRef.current)
-    }
+    return () => cancelAnimationFrame(animRef.current)
   }, [])
 
   return (

@@ -80,6 +80,7 @@ export function MyPatchMap({ patch }: Props) {
       style={{ width: '100%', height: '100%' }}
       mapStyle="mapbox://styles/mapbox/satellite-v9"
       onLoad={handleLoad}
+      onError={e => { if (!e.error?.message?.includes('LngLat')) console.error(e) }}
     />
   )
 }
