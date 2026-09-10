@@ -129,3 +129,35 @@ The POC found Sentinel-2 to be the appropriate current choice. Higher-resolution
 | More indices | Add NDWI (drought stress) and NBR (fire damage) — composite already exists, minimal extra cost |
 | Historical depth | Extend `year_start` to 2017 for a full 8-year baseline |
 | Season config UI | Let land owners set `season_start_month` / `season_end_month` in patch settings |
+
+---
+
+## Current Integrations & References
+
+The integration architecture is provider-agnostic. The following providers and platforms are currently in use across the MVP data and integration approach.
+
+| Integration | Purpose |
+|---|---|
+| **Google Earth Engine** | Satellite imagery computation — NDVI, cloud masking, seasonal compositing |
+| **Copernicus / Sentinel-2** | Free 10m satellite imagery, globally available from 2017 |
+| **GBIF** | Biodiversity data — species count, threatened species, top species names |
+| **SoilGrids** | Soil data — organic carbon, pH, clay % at 0–5cm depth |
+| **Global Forest Watch** | Forest and environmental intelligence — tree cover %, carbon density, cover loss |
+| **OpenWeather** | Weather and environmental data |
+| **Open-Meteo** | Weather forecast data |
+| **OpenEPI** | Environmental / geospatial data |
+| **Google Maps Platform** | Mapping and location services |
+| **Mapbox** | Maps and geospatial visualisation — satellite basemap, 3D terrain, polygon drawing |
+
+### Reference Links
+
+- [Google Earth Engine API](https://developers.google.com/earth-engine)
+- [Copernicus Data Space Ecosystem](https://dataspace.copernicus.eu)
+- [GBIF API](https://www.gbif.org/developer/summary)
+- [SoilGrids](https://soilgrids.org/)
+- [Global Forest Watch Data API](https://data-api.globalforestwatch.org)
+- [OpenWeather API](https://openweathermap.org/api)
+- [Open-Meteo](https://open-meteo.com)
+- [OpenEPI Data Catalog](https://api.openepi.io)
+- [Google Maps Platform](https://developers.google.com/maps)
+- [Mapbox](https://docs.mapbox.com)
