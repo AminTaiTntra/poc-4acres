@@ -14,6 +14,9 @@ FROM node:20-alpine
 WORKDIR /app
 COPY --from=build /app/.next/standalone ./
 COPY --from=build /app/.next/static ./.next/static
+# @google/earthengine is not bundled (serverExternalPackages) so NFT may miss it —
+# copy full node_modules to guarantee the package is present at runtime
+COPY --from=build /app/node_modules ./node_modules
 ENV NODE_ENV=production
 ENV HOSTNAME=0.0.0.0
 EXPOSE 3000

@@ -14,20 +14,6 @@ services:
       timeout: 5s
       retries: 10
 
-  ndvi-service:
-    build: ./ndvi-service
-    ports: ["8002:8001"]
-    environment:
-      GEE_SERVICE_ACCOUNT_KEY: /secrets/gee-sa-key.json
-    volumes:
-      - ./secrets/gee-sa-key.json:/secrets/gee-sa-key.json:ro
-    healthcheck:
-      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8001/health')"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 15s
-
   api:
     build: ./backend
     ports: ["8080:8080"]
@@ -39,8 +25,6 @@ services:
     depends_on:
       db:
         condition: service_healthy
-      ndvi-service:
-        condition: service_healthy
 
   frontend:
     build:
@@ -49,6 +33,10 @@ services:
         NEXT_PUBLIC_MAPBOX_TOKEN: ${MAPBOX_TOKEN}
         NEXT_PUBLIC_API_URL: http://localhost:8080
     ports: ["3000:3000"]
+    environment:
+      GEE_SERVICE_ACCOUNT_KEY: /secrets/gee-sa-key.json
+    volumes:
+      - ./secrets/gee-sa-key.json:/secrets/gee-sa-key.json:ro
     depends_on: [api]
 
   pgadmin:
