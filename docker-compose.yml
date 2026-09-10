@@ -16,7 +16,7 @@ services:
 
   ndvi-service:
     build: ./ndvi-service
-    ports: ["8001:8001"]
+    ports: ["8002:8001"]
     environment:
       GEE_SERVICE_ACCOUNT_KEY: /secrets/gee-sa-key.json
     volumes:
