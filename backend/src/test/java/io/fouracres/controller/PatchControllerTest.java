@@ -10,6 +10,7 @@ import io.fouracres.model.EcosystemType;
 import io.fouracres.model.Patch;
 import io.fouracres.repository.PatchRepository;
 import io.fouracres.service.InsightsService;
+import io.fouracres.service.VegetationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.Coordinate;
@@ -35,6 +36,7 @@ class PatchControllerTest {
 
     private PatchRepository patchRepository;
     private InsightsService insightsService;
+    private VegetationService vegetationService;
     private MockMvc mockMvc;
     private ObjectMapper objectMapper;
 
@@ -44,7 +46,8 @@ class PatchControllerTest {
     void setUp() {
         patchRepository = Mockito.mock(PatchRepository.class);
         insightsService = Mockito.mock(InsightsService.class);
-        var controller = new PatchController(patchRepository, insightsService);
+        vegetationService = Mockito.mock(VegetationService.class);
+        var controller = new PatchController(patchRepository, insightsService, vegetationService);
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
         objectMapper = new ObjectMapper();
     }

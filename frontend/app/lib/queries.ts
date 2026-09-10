@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 import {
-  claimPatch, fetchClaim, fetchInsights, fetchPatch, fetchPatches, registerPatch,
+  claimPatch, fetchClaim, fetchInsights, fetchPatch, fetchPatches, fetchVegetation, registerPatch,
 } from './api'
 import type { ClaimRequest, PatchRegistrationRequest } from './types'
 
@@ -49,5 +49,15 @@ export function useClaimPatch() {
   return useMutation({
     mutationFn: ({ patchId, ...req }: { patchId: string } & ClaimRequest) =>
       claimPatch(patchId, req),
+  })
+}
+
+export function useVegetation(patchId: string | null) {
+  return useQuery({
+    queryKey: ['vegetation', patchId],
+    queryFn: () => fetchVegetation(patchId!),
+    enabled: patchId != null,
+    staleTime: 1000 * 60 * 60 * 24,
+    retry: false,
   })
 }

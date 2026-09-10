@@ -1,4 +1,4 @@
-import { ClaimDto, ClaimRequest, Patch, PatchInsights, PatchRegistrationRequest } from './types'
+import { ClaimDto, ClaimRequest, Patch, PatchInsights, PatchRegistrationRequest, VegetationData } from './types'
 
 const BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080'
 
@@ -44,5 +44,11 @@ export async function claimPatch(patchId: string, req: ClaimRequest): Promise<Cl
   })
   if (res.status === 409) throw new Error('This patch has already been claimed')
   if (!res.ok) throw new Error(`claimPatch failed: ${res.status}`)
+  return res.json()
+}
+
+export async function fetchVegetation(patchId: string): Promise<VegetationData> {
+  const res = await fetch(`${BASE}/api/patches/${patchId}/vegetation`)
+  if (!res.ok) throw new Error(`fetchVegetation failed: ${res.status}`)
   return res.json()
 }

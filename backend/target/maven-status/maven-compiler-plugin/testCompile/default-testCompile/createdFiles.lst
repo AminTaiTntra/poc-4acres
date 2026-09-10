@@ -1,0 +1,12 @@
+io/fouracres/controller/PatchControllerTest.class
+io/fouracres/client/WeatherApiClientTest.class
+io/fouracres/service/InsightsServiceTest.class
+io/fouracres/client/MapboxGeocodingClientTest.class
+io/fouracres/client/GbifClientTest.class
+io/fouracres/client/SoilGridsClientTest.class
+io/fouracres/service/ClaimServiceTest.class
+io/fouracres/client/NdviClientTest.class
+io/fouracres/service/VegetationServiceTest.class
+io/fouracres/controller/ClaimControllerTest.class
+io/fouracres/client/GfwClientTest.class
+io/fouracres/client/SentinelClientTest.class

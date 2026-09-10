@@ -40,6 +40,12 @@ public class Patch {
     @Column(name = "gfw_geostore_id", length = 100)
     private String gfwGeostoreId;
 
+    @Column(name = "season_start_month", nullable = false)
+    private int seasonStartMonth = 10;
+
+    @Column(name = "season_end_month", nullable = false)
+    private int seasonEndMonth = 11;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private PatchStatus status = PatchStatus.AVAILABLE;
@@ -61,6 +67,8 @@ public class Patch {
     public Polygon getBoundary() { return boundary; }
     public BigDecimal getAreaAcres() { return areaAcres; }
     public String getGfwGeostoreId() { return gfwGeostoreId; }
+    public int getSeasonStartMonth() { return seasonStartMonth; }
+    public int getSeasonEndMonth()   { return seasonEndMonth; }
     public PatchStatus getStatus() { return status; }
     public String getOwnerName() { return ownerName; }
 

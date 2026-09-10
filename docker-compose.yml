@@ -35,7 +35,21 @@ services:
         NEXT_PUBLIC_MAPBOX_TOKEN: ${MAPBOX_TOKEN}
         NEXT_PUBLIC_API_URL: http://localhost:8080
     ports: ["3000:3000"]
+    environment:
+      GEE_SERVICE_ACCOUNT_KEY: /secrets/gee-sa-key.json
+    volumes:
+      - ./secrets/gee-sa-key.json:/secrets/gee-sa-key.json:ro
     depends_on: [api]
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@4acres.dev
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports: ["5050:80"]
+    depends_on:
+      db:
+        condition: service_healthy
 
 volumes:
   pgdata:
