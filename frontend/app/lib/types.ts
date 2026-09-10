@@ -57,6 +57,21 @@ export interface SatelliteSceneData {
   thumbnailUrl: string | null
 }
 
+export interface WaterData {
+  surfaceWaterHa: number
+  occurrenceClass: 'None' | 'Seasonal' | 'Permanent'
+  recurrencePercent: number
+  period: string
+}
+
+export interface TerrainData {
+  elevationMinM: number
+  elevationMaxM: number
+  avgSlopeDeg: number
+  maxSlopeDeg: number
+  terrainClass: 'Flat' | 'Rolling' | 'Hilly' | 'Steep' | 'Unknown'
+}
+
 export interface PatchInsights {
   biodiversity: BiodiversityData
   soil: SoilData
@@ -64,6 +79,8 @@ export interface PatchInsights {
   geographicContext: GeographicContextData | null
   weather: WeatherData | null
   satellite: SatelliteSceneData | null
+  water: WaterData | null
+  terrain: TerrainData | null
 }
 
 export interface BoundaryGeoJson {
