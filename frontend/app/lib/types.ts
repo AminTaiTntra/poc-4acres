@@ -111,3 +111,22 @@ export interface ClaimRequest {
   stewardName: string
   stewardEmail: string
 }
+
+export interface NdviYearlyPoint {
+  year: number
+  ndvi: number | null
+  validPixelPct: number | null
+  observationDate: string
+}
+
+export interface VegetationData {
+  yearly: (NdviYearlyPoint | null)[]
+  currentNdvi: number
+  baselineNdvi: number
+  changePct: number
+  trend: 'improving' | 'stable' | 'degrading'
+  condition: 'good' | 'fair' | 'poor'
+  lastObservation: string
+  resolutionM: number
+  source: string
+}
