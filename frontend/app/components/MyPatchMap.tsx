@@ -19,7 +19,7 @@ export function MyPatchMap({ patch }: Props) {
 
     map.addSource('mapbox-dem', {
       type: 'raster-dem',
-      url: 'mapbox://mapbox.mapbox-terrain-v2',
+      url: 'mapbox://mapbox.mapbox-terrain-dem-v1',
       tileSize: 512,
     })
 
