@@ -2,3 +2,4 @@
 .superpowers/
 *.env
 .env
+secrets/gee-sa-key.json

@@ -14,6 +14,20 @@ services:
       timeout: 5s
       retries: 10
 
+  ndvi-service:
+    build: ./ndvi-service
+    ports: ["8001:8001"]
+    environment:
+      GEE_SERVICE_ACCOUNT_KEY: /secrets/gee-sa-key.json
+    volumes:
+      - ./secrets/gee-sa-key.json:/secrets/gee-sa-key.json:ro
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8001/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
   api:
     build: ./backend
     ports: ["8080:8080"]
@@ -24,6 +38,8 @@ services:
       SPRING_DATASOURCE_PASSWORD: fouracres_dev
     depends_on:
       db:
+        condition: service_healthy
+      ndvi-service:
         condition: service_healthy
 
   frontend:
@@ -38,7 +54,7 @@ services:
   pgadmin:
     image: dpage/pgadmin4:latest
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@4acres.local
+      PGADMIN_DEFAULT_EMAIL: admin@4acres.dev
       PGADMIN_DEFAULT_PASSWORD: admin
     ports: ["5050:80"]
     depends_on:
