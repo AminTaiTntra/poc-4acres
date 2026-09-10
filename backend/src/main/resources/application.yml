@@ -26,4 +26,4 @@ app:
   soilgrids:
     base-url: https://rest.soilgrids.org
   ndvi:
-    service-url: ${NDVI_SERVICE_URL:http://localhost:8001}
+    service-url: ${NDVI_SERVICE_URL:http://ndvi-service:8001}
