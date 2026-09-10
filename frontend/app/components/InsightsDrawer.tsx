@@ -4,6 +4,10 @@ import { useInsights } from '../lib/queries'
 import { BiodiversityCard } from './BiodiversityCard'
 import { SoilCard } from './SoilCard'
 import { CarbonCard } from './CarbonCard'
+import { LandCoverCard } from './LandCoverCard'
+import { GeographicContextCard } from './GeographicContextCard'
+import { WeatherCard } from './WeatherCard'
+import { SatelliteCard } from './SatelliteCard'
 
 interface Props {
   patchId: string | null
@@ -48,6 +52,10 @@ export function InsightsDrawer({ patchId, patchName }: Props) {
             <BiodiversityCard data={data.biodiversity} />
             <SoilCard data={data.soil} />
             <CarbonCard data={data.carbon} />
+            <LandCoverCard data={data.landCover} />
+            <GeographicContextCard data={data.geographicContext} />
+            <WeatherCard data={data.weather} />
+            <SatelliteCard data={data.satellite} />
           </>
         )}
       </div>

@@ -7,6 +7,7 @@ import { PatchInfoCard } from '../../components/PatchInfoCard'
 import { GeographicContextCard } from '../../components/GeographicContextCard'
 import { WeatherCard } from '../../components/WeatherCard'
 import { SatelliteCard } from '../../components/SatelliteCard'
+import { LandCoverCard } from '../../components/LandCoverCard'
 
 const MyPatchMap = dynamic(
   () => import('../../components/MyPatchMap').then(m => ({ default: m.MyPatchMap })),
@@ -57,6 +58,11 @@ export default function PatchPage() {
       {/* Identity card — top-left */}
       <div className="absolute top-4 left-4 z-10 w-64">
         <PatchInfoCard type="identity" patch={patch} claim={claim} />
+      </div>
+
+      {/* Land cover + historical change — own row, top-left of the strips */}
+      <div className="absolute bottom-[19rem] left-4 z-10 w-80">
+        <LandCoverCard data={insights?.landCover ?? null} />
       </div>
 
       {/* New integrations row — above existing strip */}

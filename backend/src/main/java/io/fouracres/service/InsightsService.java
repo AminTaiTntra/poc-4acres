@@ -30,6 +30,7 @@ public class InsightsService {
     private final MapboxGeocodingClient geocodingClient;
     private final WeatherApiClient weatherClient;
     private final SentinelClient sentinelClient;
+    private final DynamicWorldClient dynamicWorldClient;
     private final ObjectMapper mapper;
 
     public InsightsService(PatchRepository patchRepository,
@@ -40,16 +41,18 @@ public class InsightsService {
                             MapboxGeocodingClient geocodingClient,
                             WeatherApiClient weatherClient,
                             SentinelClient sentinelClient,
+                            DynamicWorldClient dynamicWorldClient,
                             ObjectMapper mapper) {
-        this.patchRepository  = patchRepository;
-        this.cacheRepository  = cacheRepository;
-        this.gbifClient       = gbifClient;
-        this.soilGridsClient  = soilGridsClient;
-        this.gfwClient        = gfwClient;
-        this.geocodingClient  = geocodingClient;
-        this.weatherClient    = weatherClient;
-        this.sentinelClient   = sentinelClient;
-        this.mapper           = mapper;
+        this.patchRepository    = patchRepository;
+        this.cacheRepository    = cacheRepository;
+        this.gbifClient         = gbifClient;
+        this.soilGridsClient    = soilGridsClient;
+        this.gfwClient          = gfwClient;
+        this.geocodingClient    = geocodingClient;
+        this.weatherClient      = weatherClient;
+        this.sentinelClient     = sentinelClient;
+        this.dynamicWorldClient = dynamicWorldClient;
+        this.mapper             = mapper;
     }
 
     public PatchInsightsDto getInsights(UUID patchId) {
@@ -61,11 +64,14 @@ public class InsightsService {
         Optional<InsightsCache> geoCached       = cacheRepository.findByPatchIdAndLayerAndExpiresAtAfter(patchId, "GEOCODING",    now);
         Optional<InsightsCache> weatherCached   = cacheRepository.findByPatchIdAndLayerAndExpiresAtAfter(patchId, "WEATHER",      now);
         Optional<InsightsCache> satelliteCached = cacheRepository.findByPatchIdAndLayerAndExpiresAtAfter(patchId, "SATELLITE",    now);
+        Optional<InsightsCache> landCoverCached = cacheRepository.findByPatchIdAndLayerAndExpiresAtAfter(patchId, "LANDCOVER",    now);
 
         if (bioCached.isPresent() && soilCached.isPresent() && carbonCached.isPresent()
-                && geoCached.isPresent() && weatherCached.isPresent() && satelliteCached.isPresent()) {
+                && geoCached.isPresent() && weatherCached.isPresent() && satelliteCached.isPresent()
+                && landCoverCached.isPresent()) {
             return deserialize(bioCached.get(), soilCached.get(), carbonCached.get(),
-                               geoCached.get(), weatherCached.get(), satelliteCached.get());
+                               geoCached.get(), weatherCached.get(), satelliteCached.get(),
+                               landCoverCached.get());
         }
 
         Patch patch = patchRepository.findById(patchId)
@@ -77,9 +83,10 @@ public class InsightsService {
         var geoFuture       = CompletableFuture.supplyAsync(() -> geocodingClient.fetch(patch));
         var weatherFuture   = CompletableFuture.supplyAsync(() -> weatherClient.fetch(patch));
         var satelliteFuture = CompletableFuture.supplyAsync(() -> sentinelClient.fetch(patch));
+        var landCoverFuture = CompletableFuture.supplyAsync(() -> dynamicWorldClient.fetch(patch));
 
         CompletableFuture.allOf(bioFuture, soilFuture, carbonFuture,
-                                 geoFuture, weatherFuture, satelliteFuture).join();
+                                 geoFuture, weatherFuture, satelliteFuture, landCoverFuture).join();
 
         var bio       = bioFuture.join();
         var soil      = soilFuture.join();
@@ -87,6 +94,7 @@ public class InsightsService {
         var geo       = geoFuture.join();
         var weather   = weatherFuture.join();
         var satellite = satelliteFuture.join();
+        var landCover = landCoverFuture.join();
 
         saveCache(patchId, "BIODIVERSITY", bio,       expiresAt("BIODIVERSITY"));
         saveCache(patchId, "SOIL",         soil,      expiresAt("SOIL"));
@@ -94,14 +102,16 @@ public class InsightsService {
         saveCache(patchId, "GEOCODING",    geo,       expiresAt("GEOCODING"));
         saveCache(patchId, "WEATHER",      weather,   expiresAt("WEATHER"));
         saveCache(patchId, "SATELLITE",    satellite, expiresAt("SATELLITE"));
+        saveCache(patchId, "LANDCOVER",    landCover, expiresAt("LANDCOVER"));
 
-        return new PatchInsightsDto(bio, soil, carbon, geo, weather, satellite);
+        return new PatchInsightsDto(bio, soil, carbon, geo, weather, satellite, landCover);
     }
 
     private Instant expiresAt(String layer) {
         return switch (layer) {
             case "WEATHER"   -> Instant.now().plus(1,  ChronoUnit.HOURS);
             case "SATELLITE" -> Instant.now().plus(7,  ChronoUnit.DAYS);
+            case "LANDCOVER" -> Instant.now().plus(7,  ChronoUnit.DAYS);
             case "GEOCODING" -> Instant.now().plus(30, ChronoUnit.DAYS);
             default          -> Instant.now().plus(24, ChronoUnit.HOURS);
         };
@@ -115,7 +125,8 @@ public class InsightsService {
     }
 
     private PatchInsightsDto deserialize(InsightsCache bio, InsightsCache soil, InsightsCache carbon,
-                                          InsightsCache geo, InsightsCache weather, InsightsCache satellite) {
+                                          InsightsCache geo, InsightsCache weather, InsightsCache satellite,
+                                          InsightsCache landCover) {
         try {
             return new PatchInsightsDto(
                 mapper.readValue(bio.getPayload(),       BiodiversityData.class),
@@ -123,7 +134,8 @@ public class InsightsService {
                 mapper.readValue(carbon.getPayload(),    CarbonData.class),
                 mapper.readValue(geo.getPayload(),       GeographicContextData.class),
                 mapper.readValue(weather.getPayload(),   WeatherData.class),
-                mapper.readValue(satellite.getPayload(), SatelliteSceneData.class)
+                mapper.readValue(satellite.getPayload(), SatelliteSceneData.class),
+                mapper.readValue(landCover.getPayload(), LandCoverData.class)
             );
         } catch (Exception e) {
             throw new RuntimeException("Cache deserialization failed", e);

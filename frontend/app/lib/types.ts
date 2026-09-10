@@ -57,6 +57,47 @@ export interface SatelliteSceneData {
   thumbnailUrl: string | null
 }
 
+export interface LandCoverClassShare {
+  className: string
+  percent: number
+  areaAcres: number
+  areaHectares: number
+}
+
+export interface LandCoverYear {
+  year: string
+  classes: LandCoverClassShare[]
+}
+
+export interface LandCoverChange {
+  className: string
+  startPercent: number
+  endPercent: number
+  deltaPercent: number
+}
+
+export interface LandCoverTransition {
+  fromClass: string
+  toClass: string
+  areaAcres: number
+  percent: number
+}
+
+export interface LandCoverData {
+  hasData: boolean
+  source: string
+  probabilityThreshold: number
+  confidentPercent: number
+  parcelAcres: number
+  observationCount: number
+  latestPeriod: string | null
+  composition: LandCoverClassShare[]
+  history: LandCoverYear[]
+  changes: LandCoverChange[]
+  transitions: LandCoverTransition[]
+  trend: string
+}
+
 export interface PatchInsights {
   biodiversity: BiodiversityData
   soil: SoilData
@@ -64,6 +105,7 @@ export interface PatchInsights {
   geographicContext: GeographicContextData | null
   weather: WeatherData | null
   satellite: SatelliteSceneData | null
+  landCover: LandCoverData | null
 }
 
 export interface BoundaryGeoJson {
