@@ -32,7 +32,7 @@ def test_ndvi_endpoint_returns_503_when_gee_not_ready(client):
 
 
 def test_ndvi_endpoint_returns_501_when_gee_ready_but_not_implemented(client):
-    """When GEE is ready but compute_ndvi not implemented, /ndvi returns 501."""
+    """When GEE is ready but compute_ndvi raises NotImplementedError, /ndvi returns 501."""
     payload = {
         "polygon": {"type": "Polygon", "coordinates": [[[77.0, 20.0], [77.1, 20.0], [77.1, 20.1], [77.0, 20.1], [77.0, 20.0]]]},
         "season_start_month": 10,
@@ -41,8 +41,10 @@ def test_ndvi_endpoint_returns_501_when_gee_ready_but_not_implemented(client):
         "year_end": 2024,
     }
 
-    # Patch GEE_READY to True so we pass the guard, then hit NotImplementedError
-    with patch("gee_client.GEE_READY", True):
+    # Patch GEE_READY to True and mock compute_ndvi to raise NotImplementedError
+    # so we can verify the 501 error path in main.py is handled correctly
+    with patch("gee_client.GEE_READY", True), \
+         patch("gee_client.compute_ndvi", side_effect=NotImplementedError):
         resp = client.post("/ndvi", json=payload)
         assert resp.status_code == 501
         assert "not yet implemented" in resp.json()["detail"].lower()
