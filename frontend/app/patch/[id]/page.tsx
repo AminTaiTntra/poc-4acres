@@ -2,11 +2,12 @@
 
 import dynamic from 'next/dynamic'
 import { useParams } from 'next/navigation'
-import { usePatch, useInsights, useClaim } from '../../lib/queries'
+import { usePatch, useInsights, useClaim, useVegetation } from '../../lib/queries'
 import { PatchInfoCard } from '../../components/PatchInfoCard'
 import { GeographicContextCard } from '../../components/GeographicContextCard'
 import { WeatherCard } from '../../components/WeatherCard'
 import { SatelliteCard } from '../../components/SatelliteCard'
+import { VegetationCard } from '../../components/VegetationCard'
 
 const MyPatchMap = dynamic(
   () => import('../../components/MyPatchMap').then(m => ({ default: m.MyPatchMap })),
@@ -18,6 +19,7 @@ export default function PatchPage() {
   const { data: patch, isLoading } = usePatch(id)
   const { data: insights } = useInsights(id)
   const { data: claim } = useClaim(id)
+  const { data: vegetation } = useVegetation(id)
 
   if (isLoading) {
     return (
@@ -64,6 +66,7 @@ export default function PatchPage() {
         <GeographicContextCard data={insights?.geographicContext ?? null} className="flex-1" />
         <WeatherCard data={insights?.weather ?? null} className="flex-1" />
         <SatelliteCard data={insights?.satellite ?? null} className="flex-1" />
+        <VegetationCard data={vegetation ?? null} className="flex-1" />
       </div>
 
       {/* Existing metrics row — bottom */}
