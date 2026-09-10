@@ -145,6 +145,7 @@ class PatchControllerTest {
             new CarbonData(35.0, 210.5, 0.08),
             null,
             null,
+            null,
             null
         );
         when(insightsService.getInsights(id)).thenReturn(insights);

@@ -2,5 +2,5 @@
 .superpowers/
 *.env
 .env
-secrets/gee-sa-key.json
-secrets/*.json
+secrets/
+backend/target/

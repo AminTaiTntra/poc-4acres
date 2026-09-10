@@ -6,5 +6,6 @@ public record PatchInsightsDto(
     CarbonData             carbon,
     GeographicContextData  geographicContext,
     WeatherData            weather,
-    SatelliteSceneData     satellite
+    SatelliteSceneData     satellite,
+    LandCoverData          landCover
 ) {}
