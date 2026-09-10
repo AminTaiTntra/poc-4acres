@@ -114,6 +114,51 @@ Then invalidate the cache (or wait 24h) and reload insights — Carbon cards wil
 
 ---
 
+## 5b. Enable Land Cover data (Dynamic World, optional)
+
+The **Land Cover + Historical Change** card answers _"what occupies this land, and how has that
+composition changed?"_ from Google **Dynamic World V1** (`GOOGLE/DYNAMICWORLD/V1`) — 10 m
+near-real-time land-use/land-cover, 9 classes, class probabilities, 2015→present — via the
+Earth Engine REST API.
+
+You need a Google Cloud project registered for Earth Engine and a **service-account** key:
+
+1. Register a project at [code.earthengine.google.com](https://code.earthengine.google.com) (non-commercial or commercial).
+2. In the Cloud console create a service account, grant it the **Earth Engine Resource Viewer** role,
+   and download a JSON key.
+3. Add to `.env`:
+
+   ```env
+   GEE_PROJECT_ID=your-ee-project-id
+   GEE_SERVICE_ACCOUNT_JSON=/absolute/path/to/service-account.json   # or paste the raw JSON
+   ```
+
+4. Restart the `api` service. Reload a patch → the Land Cover card populates.
+
+**What the POC exercises** — read-only `value:compute` only, no `maps.create` / EE writes
+(all in `DynamicWorldClient` / `DynamicWorldExpression`):
+
+| Step | Where |
+|------|-------|
+| Polygon → Dynamic World pixels | `Collection.filter(Filter.calendarRange(year,'year'))`; the polygon scopes every `Image.reduceRegion` |
+| Cloud masking | Dynamic World pixels exist only for cloud-masked Sentinel-2 observations — surfaced as `observationCount` (mean obs/pixel, latest year; e.g. ~4 in tropical Borneo vs ~31 in Yellowstone) |
+| Class probability threshold | share of pixels with `max(mean class prob) ≥ app.dynamicworld.probability-threshold` (default 0.5) → `confidentPercent` |
+| Percentage per class | `frequencyHistogram` of the per-pixel mode `label` → true area share; also `areaAcres` / `areaHectares` per class, plus a secondary mean-probability `probabilityProfile` |
+| Historical comparison | one reduction per year in `app.dynamicworld.history-years` (default **2016–2026**, run in parallel) + per-class sparklines |
+| Change detection | per-class delta first→last year, **plus a class-to-class transition matrix** (`fromClass → toClass`, acres + %), and a plain-language `trend` |
+
+Without the two env vars the card shows _"Land-cover data unavailable"_ and the rest of the
+insights payload is unaffected.
+
+> **Note:** the Earth Engine `value:compute` expression graphs in `DynamicWorldExpression` are built
+> against the EE Cloud API algorithm registry (the Cloud API has no `filterDate`/`filterBounds`).
+> If a live call returns HTTP 400 (`bad expression`), check the `DynamicWorldClient` WARN logs for the
+> offending algorithm/argument name and adjust the constants in that one file. The interactive
+> **raster-tile** layers (Dynamic World / NDVI / water overlays on the Mapbox map) are *not* built —
+> they need `earthengine.maps.create`, i.e. the `roles/earthengine.writer` role on the service account.
+
+---
+
 ## 6. Run backend tests
 
 Tests run inside Docker without a live database (Mockito mocks):
@@ -127,7 +172,7 @@ docker run --rm \
   mvn test -q
 ```
 
-Expected: **12 tests, 0 failures**.
+Expected: **39 tests, 0 failures**.
 
 ---
 

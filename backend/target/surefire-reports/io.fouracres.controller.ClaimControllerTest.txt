@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: io.fouracres.controller.ClaimControllerTest
--------------------------------------------------------------------------------
-Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.398 s -- in io.fouracres.controller.ClaimControllerTest
