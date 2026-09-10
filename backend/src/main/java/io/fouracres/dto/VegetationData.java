@@ -1,16 +1,16 @@
 package io.fouracres.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonAlias;
 import java.util.List;
 
 public record VegetationData(
         List<NdviYearlyPoint> yearly,
-        @JsonProperty("current_ndvi")    double currentNdvi,
-        @JsonProperty("baseline_ndvi")   double baselineNdvi,
-        @JsonProperty("change_pct")      double changePct,
+        @JsonAlias("current_ndvi")    double currentNdvi,
+        @JsonAlias("baseline_ndvi")   double baselineNdvi,
+        @JsonAlias("change_pct")      double changePct,
         String trend,
         String condition,
-        @JsonProperty("last_observation") String lastObservation,
-        @JsonProperty("resolution_m")    int resolutionM,
+        @JsonAlias("last_observation") String lastObservation,
+        @JsonAlias("resolution_m")    int resolutionM,
         String source
 ) {}
