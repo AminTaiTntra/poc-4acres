@@ -4,11 +4,7 @@ import dynamic from 'next/dynamic'
 import { useParams } from 'next/navigation'
 import { usePatch, useInsights, useClaim, useVegetation } from '../../lib/queries'
 import { PatchInfoCard } from '../../components/PatchInfoCard'
-import { GeographicContextCard } from '../../components/GeographicContextCard'
-import { WeatherCard } from '../../components/WeatherCard'
-import { SatelliteCard } from '../../components/SatelliteCard'
-import { VegetationCard } from '../../components/VegetationCard'
-import { LandCoverCard } from '../../components/LandCoverCard'
+import { InsightsSheet } from '../../components/InsightsSheet'
 
 const MyPatchMap = dynamic(
   () => import('../../components/MyPatchMap').then(m => ({ default: m.MyPatchMap })),
@@ -62,25 +58,8 @@ export default function PatchPage() {
         <PatchInfoCard type="identity" patch={patch} claim={claim} />
       </div>
 
-      {/* Land cover + historical change — own row, top-left of the strips */}
-      <div className="absolute bottom-[19rem] left-4 z-10 w-80">
-        <LandCoverCard data={insights?.landCover ?? null} />
-      </div>
-
-      {/* New integrations row — above existing strip */}
-      <div className="absolute bottom-36 left-4 right-4 z-10 flex gap-3">
-        <GeographicContextCard data={insights?.geographicContext ?? null} className="flex-1" />
-        <WeatherCard data={insights?.weather ?? null} className="flex-1" />
-        <SatelliteCard data={insights?.satellite ?? null} className="flex-1" />
-        <VegetationCard data={vegetation ?? null} className="flex-1" />
-      </div>
-
-      {/* Existing metrics row — bottom */}
-      <div className="absolute bottom-6 left-4 right-4 z-10 flex gap-3">
-        <PatchInfoCard type="biodiversity" insights={insights} className="flex-1" />
-        <PatchInfoCard type="soil" insights={insights} className="flex-1" />
-        <PatchInfoCard type="carbon" insights={insights} className="flex-1" />
-      </div>
+      {/* All insight cards live in a collapsible bottom sheet so the map stays visible by default */}
+      <InsightsSheet insights={insights} vegetation={vegetation} />
     </div>
   )
 }

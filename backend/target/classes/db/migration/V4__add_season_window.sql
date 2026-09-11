@@ -1,3 +1,0 @@
-ALTER TABLE patches
-    ADD COLUMN IF NOT EXISTS season_start_month INT NOT NULL DEFAULT 10,
-    ADD COLUMN IF NOT EXISTS season_end_month   INT NOT NULL DEFAULT 11;

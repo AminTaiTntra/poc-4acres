@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@google/earthengine": "*",
+    "@google/earthengine": "^0.1.383",
     "@mapbox/mapbox-gl-draw": "^1.5.1",
     "@tanstack/react-query": "^5",
     "@tanstack/react-query-devtools": "^5",

@@ -7,5 +7,7 @@ public record PatchInsightsDto(
     GeographicContextData  geographicContext,
     WeatherData            weather,
     SatelliteSceneData     satellite,
+    WaterData              water,
+    TerrainData            terrain,
     LandCoverData          landCover
 ) {}

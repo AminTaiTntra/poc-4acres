@@ -24,6 +24,10 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/fouracres
       SPRING_DATASOURCE_USERNAME: fouracres
       SPRING_DATASOURCE_PASSWORD: fouracres_dev
+      GEO_ENGINE_URL: http://frontend:3000/api
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
     depends_on:
       db:
         condition: service_healthy
@@ -35,10 +39,14 @@ services:
         NEXT_PUBLIC_MAPBOX_TOKEN: ${MAPBOX_TOKEN}
         NEXT_PUBLIC_API_URL: http://localhost:8080
     ports: ["3000:3000"]
+    env_file: .env
     environment:
       GEE_SERVICE_ACCOUNT_KEY: /secrets/gee-sa-key.json
     volumes:
-      - ./secrets/gee-sa-key.json:/secrets/gee-sa-key.json:ro
+      - ./secrets:/secrets:ro
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
     depends_on: [api]
 
   pgadmin:

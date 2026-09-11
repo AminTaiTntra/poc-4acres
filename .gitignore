@@ -2,5 +2,5 @@
 .superpowers/
 *.env
 .env
-secrets/
 backend/target/
+secrets/

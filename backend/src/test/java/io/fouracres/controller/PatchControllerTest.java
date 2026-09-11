@@ -146,6 +146,8 @@ class PatchControllerTest {
             null,
             null,
             null,
+            null,
+            null,
             null
         );
         when(insightsService.getInsights(id)).thenReturn(insights);
