@@ -4,5 +4,8 @@ public record WaterData(
     double surfaceWaterHa,
     String occurrenceClass,
     double recurrencePercent,
-    String period
+    String period,
+    double currentWaterPercent,
+    String latestSceneDate,
+    int currentWindowDays
 ) {}

@@ -62,6 +62,9 @@ export interface WaterData {
   occurrenceClass: 'None' | 'Seasonal' | 'Permanent'
   recurrencePercent: number
   period: string
+  currentWaterPercent: number
+  latestSceneDate: string | null
+  currentWindowDays: number
 }
 
 export interface TerrainData {

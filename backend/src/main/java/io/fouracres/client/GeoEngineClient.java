@@ -23,7 +23,7 @@ public class GeoEngineClient {
     private static final double PATCH_RADIUS_M = Math.sqrt((4 * ACRES_TO_M2) / Math.PI);
 
     private static final WaterData DEFAULT_WATER =
-        new WaterData(0, "None", 0, "1984-2021");
+        new WaterData(0, "None", 0, "1984-2021", 0, null, 180);
     private static final TerrainData DEFAULT_TERRAIN =
         new TerrainData(0, 0, 0, 0, "Unknown");
 
@@ -48,11 +48,17 @@ public class GeoEngineClient {
                 return DEFAULT_WATER;
             }
             JsonNode body = mapper.readTree(response.body());
+            JsonNode latestSceneNode = body.path("latestSceneDate");
+            String latestSceneDate = (latestSceneNode.isMissingNode() || latestSceneNode.isNull())
+                ? null : latestSceneNode.asText();
             return new WaterData(
                 body.path("surfaceWaterHa").asDouble(0),
                 body.path("occurrenceClass").asText("None"),
                 body.path("recurrencePercent").asDouble(0),
-                body.path("period").asText("1984-2021")
+                body.path("period").asText("1984-2021"),
+                body.path("currentWaterPercent").asDouble(0),
+                latestSceneDate,
+                body.path("currentWindowDays").asInt(180)
             );
         } catch (Exception e) {
             log.warn("Water fetch failed for patch {}: {}", patch.getId(), e.toString());
