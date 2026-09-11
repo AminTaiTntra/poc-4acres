@@ -75,6 +75,47 @@ export interface TerrainData {
   terrainClass: 'Flat' | 'Rolling' | 'Hilly' | 'Steep' | 'Unknown'
 }
 
+export interface LandCoverClassShare {
+  className: string
+  percent: number
+  areaAcres: number
+  areaHectares: number
+}
+
+export interface LandCoverYear {
+  year: string
+  classes: LandCoverClassShare[]
+}
+
+export interface LandCoverChange {
+  className: string
+  startPercent: number
+  endPercent: number
+  deltaPercent: number
+}
+
+export interface LandCoverTransition {
+  fromClass: string
+  toClass: string
+  areaAcres: number
+  percent: number
+}
+
+export interface LandCoverData {
+  hasData: boolean
+  source: string
+  probabilityThreshold: number
+  confidentPercent: number
+  parcelAcres: number
+  observationCount: number
+  latestPeriod: string | null
+  composition: LandCoverClassShare[]
+  history: LandCoverYear[]
+  changes: LandCoverChange[]
+  transitions: LandCoverTransition[]
+  trend: string
+}
+
 export interface PatchInsights {
   biodiversity: BiodiversityData
   soil: SoilData
@@ -84,6 +125,7 @@ export interface PatchInsights {
   satellite: SatelliteSceneData | null
   water: WaterData | null
   terrain: TerrainData | null
+  landCover: LandCoverData | null
 }
 
 export interface BoundaryGeoJson {
@@ -130,4 +172,23 @@ export interface PatchRegistrationRequest {
 export interface ClaimRequest {
   stewardName: string
   stewardEmail: string
+}
+
+export interface NdviYearlyPoint {
+  year: number
+  ndvi: number | null
+  validPixelPct: number | null
+  observationDate: string
+}
+
+export interface VegetationData {
+  yearly: (NdviYearlyPoint | null)[]
+  currentNdvi: number
+  baselineNdvi: number
+  changePct: number
+  trend: 'improving' | 'stable' | 'degrading'
+  condition: 'good' | 'fair' | 'poor'
+  lastObservation: string
+  resolutionM: number
+  source: string
 }

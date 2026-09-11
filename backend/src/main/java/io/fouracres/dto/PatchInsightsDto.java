@@ -8,5 +8,6 @@ public record PatchInsightsDto(
     WeatherData            weather,
     SatelliteSceneData     satellite,
     WaterData              water,
-    TerrainData            terrain
+    TerrainData            terrain,
+    LandCoverData          landCover
 ) {}

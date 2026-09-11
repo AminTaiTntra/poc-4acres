@@ -25,3 +25,5 @@ app:
     base-url: https://api.gbif.org/v1
   soilgrids:
     base-url: https://rest.soilgrids.org
+  ndvi:
+    service-url: ${NDVI_SERVICE_URL:http://frontend:3000/api}

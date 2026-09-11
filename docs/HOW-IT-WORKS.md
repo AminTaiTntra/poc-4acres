@@ -146,7 +146,7 @@ This is the most complex. Three things happen on map load:
 
 1. **Terrain DEM** (Digital Elevation Model) — adds real 3D height to the terrain:
    ```ts
-   map.addSource('mapbox-dem', { type: 'raster-dem', url: 'mapbox://mapbox.mapbox-terrain-v2', tileSize: 512 })
+   map.addSource('mapbox-dem', { type: 'raster-dem', url: 'mapbox://mapbox.mapbox-terrain-dem-v1', tileSize: 512 })
    map.setTerrain({ source: 'mapbox-dem', exaggeration: 1.5 })  // 1.5× height exaggeration
    ```
 

@@ -6,6 +6,10 @@ import { SoilCard } from "./SoilCard";
 import { CarbonCard } from "./CarbonCard";
 import { WaterCard } from "./WaterCard";
 import { TerrainCard } from "./TerrainCard";
+import { LandCoverCard } from "./LandCoverCard";
+import { GeographicContextCard } from "./GeographicContextCard";
+import { WeatherCard } from "./WeatherCard";
+import { SatelliteCard } from "./SatelliteCard";
 
 interface Props {
   patchId: string | null;
@@ -61,6 +65,10 @@ export function InsightsDrawer({ patchId, patchName }: Props) {
             <CarbonCard data={data.carbon} />
             <WaterCard data={data.water} />
             <TerrainCard data={data.terrain} />
+            <LandCoverCard data={data.landCover} />
+            <GeographicContextCard data={data.geographicContext} />
+            <WeatherCard data={data.weather} />
+            <SatelliteCard data={data.satellite} />
           </>
         )}
       </div>

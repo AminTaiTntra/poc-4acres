@@ -128,11 +128,6 @@ export default function RegisterPage() {
 
       {/* Map */}
       <div className="flex-1 relative">
-        {!coords && registeredName === null && (
-          <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 bg-black/70 backdrop-blur-sm text-white text-sm px-4 py-2 rounded-full pointer-events-none">
-            Use the polygon tool (top-right of map) to draw your land boundary
-          </div>
-        )}
         <DrawMap onPolygonDrawn={setCoords} />
       </div>
     </div>

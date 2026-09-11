@@ -2,13 +2,15 @@
 
 import dynamic from 'next/dynamic'
 import { useParams } from 'next/navigation'
-import { usePatch, useInsights, useClaim } from '../../lib/queries'
+import { usePatch, useInsights, useClaim, useVegetation } from '../../lib/queries'
 import { PatchInfoCard } from '../../components/PatchInfoCard'
 import { GeographicContextCard } from '../../components/GeographicContextCard'
 import { WeatherCard } from '../../components/WeatherCard'
 import { SatelliteCard } from '../../components/SatelliteCard'
 import { WaterCard } from '../../components/WaterCard'
 import { TerrainCard } from '../../components/TerrainCard'
+import { VegetationCard } from '../../components/VegetationCard'
+import { LandCoverCard } from '../../components/LandCoverCard'
 
 const MyPatchMap = dynamic(
   () => import('../../components/MyPatchMap').then(m => ({ default: m.MyPatchMap })),
@@ -20,6 +22,7 @@ export default function PatchPage() {
   const { data: patch, isLoading } = usePatch(id)
   const { data: insights } = useInsights(id)
   const { data: claim } = useClaim(id)
+  const { data: vegetation } = useVegetation(id)
 
   if (isLoading) {
     return (
@@ -61,6 +64,11 @@ export default function PatchPage() {
         <PatchInfoCard type="identity" patch={patch} claim={claim} />
       </div>
 
+      {/* Land cover + historical change — own row, top-left of the strips */}
+      <div className="absolute bottom-[34rem] left-4 z-10 w-80">
+        <LandCoverCard data={insights?.landCover ?? null} />
+      </div>
+
       {/* Water + terrain row — above the other integrations row */}
       <div className="absolute bottom-72 left-4 right-4 z-10 flex gap-3">
         <WaterCard data={insights?.water ?? null} className="flex-1" />
@@ -72,6 +80,7 @@ export default function PatchPage() {
         <GeographicContextCard data={insights?.geographicContext ?? null} className="flex-1" />
         <WeatherCard data={insights?.weather ?? null} className="flex-1" />
         <SatelliteCard data={insights?.satellite ?? null} className="flex-1" />
+        <VegetationCard data={vegetation ?? null} className="flex-1" />
       </div>
 
       {/* Existing metrics row — bottom */}
