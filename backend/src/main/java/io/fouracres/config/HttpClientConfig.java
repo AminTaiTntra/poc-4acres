@@ -8,6 +8,8 @@ import java.net.http.HttpClient;
 public class HttpClientConfig {
     @Bean
     public HttpClient httpClient() {
-        return HttpClient.newHttpClient();
+        return HttpClient.newBuilder()
+                .version(HttpClient.Version.HTTP_1_1)
+                .build();
     }
 }
