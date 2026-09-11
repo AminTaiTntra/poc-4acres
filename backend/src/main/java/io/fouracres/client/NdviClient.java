@@ -3,6 +3,8 @@ package io.fouracres.client;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fouracres.dto.VegetationData;
 import io.fouracres.model.Patch;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +21,7 @@ import java.util.Map;
 @Component
 public class NdviClient {
 
+    private static final Logger log = LoggerFactory.getLogger(NdviClient.class);
     private final HttpClient httpClient;
     private final String serviceUrl;
     private final ObjectMapper mapper = new ObjectMapper();
@@ -53,8 +56,10 @@ public class NdviClient {
                     .build();
 
             var response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            log.info("NDVI response HTTP {}: {}", response.statusCode(), response.body());
             return mapper.readValue(response.body(), VegetationData.class);
         } catch (Exception e) {
+            log.warn("NDVI fetch failed: {}", e.toString(), e);
             return null;
         }
     }
