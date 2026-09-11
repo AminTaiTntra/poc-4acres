@@ -27,13 +27,14 @@ class InsightsServiceTest {
                                          MapboxGeocodingClient geocoding,
                                          WeatherApiClient weather,
                                          SentinelClient sentinel,
+                                         GeoEngineClient geoEngine,
                                          DynamicWorldClient dynamicWorld) {
         return new InsightsService(patchRepo, cacheRepo, gbif, soil, gfw,
-                                    geocoding, weather, sentinel, dynamicWorld, new ObjectMapper());
+                                    geocoding, weather, sentinel, geoEngine, dynamicWorld, new ObjectMapper());
     }
 
     @Test
-    void getInsights_callsAllSevenClientsAndCachesAllSevenLayers() {
+    void getInsights_callsAllClientsAndCachesAllLayers() {
         var patchId = UUID.randomUUID();
         var patch   = Mockito.mock(Patch.class);
 
@@ -45,6 +46,7 @@ class InsightsServiceTest {
         var geocoding     = Mockito.mock(MapboxGeocodingClient.class);
         var weather       = Mockito.mock(WeatherApiClient.class);
         var sentinel      = Mockito.mock(SentinelClient.class);
+        var geoEngine     = Mockito.mock(GeoEngineClient.class);
         var dynamicWorld  = Mockito.mock(DynamicWorldClient.class);
 
         when(patchRepo.findById(patchId)).thenReturn(Optional.of(patch));
@@ -60,6 +62,10 @@ class InsightsServiceTest {
             new WeatherData(22.5, "Sunny", "https://cdn.example.com/sun.png", 10.0, 60, 5.0, List.of()));
         when(sentinel.fetch(patch)).thenReturn(
             new SatelliteSceneData(true, "2026-09-05T10:00:00Z", 12.4, "S2MSI2A", null));
+        when(geoEngine.fetchWater(patch)).thenReturn(
+            new WaterData(1.2, "Permanent", 80.0, "1984-2021", 15.0, "2026-09-01T00:00:00Z", 180));
+        when(geoEngine.fetchTerrain(patch)).thenReturn(
+            new TerrainData(100.0, 150.0, 5.0, 12.0, "Rolling"));
         when(dynamicWorld.fetch(patch)).thenReturn(
             new LandCoverData(true, "GOOGLE/DYNAMICWORLD/V1", 0.5, 88.0, 4.0, 25.0, "2026",
                 List.of(new LandCoverData.ClassShare("Trees", 62.0, 2.48, 1.0)),
@@ -69,7 +75,7 @@ class InsightsServiceTest {
                 List.of(new LandCoverData.Transition("Bare ground", "Trees", 0.4, 10.0)),
                 "2016→2026: Trees remains the dominant cover; becoming more vegetated (+4.0 pts vegetation)."));
 
-        var service = buildService(patchRepo, cacheRepo, gbif, soil, gfw, geocoding, weather, sentinel, dynamicWorld);
+        var service = buildService(patchRepo, cacheRepo, gbif, soil, gfw, geocoding, weather, sentinel, geoEngine, dynamicWorld);
         PatchInsightsDto result = service.getInsights(patchId);
 
         assertThat(result.biodiversity().speciesCount()).isEqualTo(42);
@@ -78,11 +84,13 @@ class InsightsServiceTest {
         assertThat(result.geographicContext().country()).isEqualTo("Mexico");
         assertThat(result.weather().tempC()).isEqualTo(22.5);
         assertThat(result.satellite().cloudCoverPercent()).isEqualTo(12.4);
+        assertThat(result.water().occurrenceClass()).isEqualTo("Permanent");
+        assertThat(result.terrain().terrainClass()).isEqualTo("Rolling");
         assertThat(result.landCover().hasData()).isTrue();
         assertThat(result.landCover().composition().get(0).className()).isEqualTo("Trees");
 
-        // 7 cache saves, one per layer
-        verify(cacheRepo, times(7)).save(any());
+        // 9 cache saves, one per layer
+        verify(cacheRepo, times(9)).save(any());
     }
 
     @Test
@@ -96,6 +104,7 @@ class InsightsServiceTest {
         var geocoding = Mockito.mock(MapboxGeocodingClient.class);
         var weather   = Mockito.mock(WeatherApiClient.class);
         var sentinel  = Mockito.mock(SentinelClient.class);
+        var geoEngine = Mockito.mock(GeoEngineClient.class);
         var dynamicWorld = Mockito.mock(DynamicWorldClient.class);
 
         var mapper = new ObjectMapper();
@@ -106,6 +115,8 @@ class InsightsServiceTest {
         var geoData  = new GeographicContextData("City", null, "City", "Region", "Country", "City, Region, Country");
         var wxData   = new WeatherData(18.0, "Cloudy", "", 5.0, 75, 2.0, List.of());
         var satData  = new SatelliteSceneData(false, null, 0.0, null, null);
+        var waterData = new WaterData(0.0, "None", 0.0, "1984-2021", 0.0, null, 180);
+        var terrainData = new TerrainData(0.0, 0.0, 0.0, 0.0, "Unknown");
         var lcData   = LandCoverData.unavailable(0.5);
 
         mockCacheHit(cacheRepo, patchId, "BIODIVERSITY", mapper.writeValueAsString(bioData));
@@ -114,18 +125,22 @@ class InsightsServiceTest {
         mockCacheHit(cacheRepo, patchId, "GEOCODING",    mapper.writeValueAsString(geoData));
         mockCacheHit(cacheRepo, patchId, "WEATHER",      mapper.writeValueAsString(wxData));
         mockCacheHit(cacheRepo, patchId, "SATELLITE",    mapper.writeValueAsString(satData));
+        mockCacheHit(cacheRepo, patchId, "WATER",        mapper.writeValueAsString(waterData));
+        mockCacheHit(cacheRepo, patchId, "TERRAIN",      mapper.writeValueAsString(terrainData));
         mockCacheHit(cacheRepo, patchId, "LANDCOVER",    mapper.writeValueAsString(lcData));
 
-        var service = buildService(patchRepo, cacheRepo, gbif, soil, gfw, geocoding, weather, sentinel, dynamicWorld);
+        var service = buildService(patchRepo, cacheRepo, gbif, soil, gfw, geocoding, weather, sentinel, geoEngine, dynamicWorld);
         PatchInsightsDto result = service.getInsights(patchId);
 
         assertThat(result.biodiversity().speciesCount()).isEqualTo(7);
         assertThat(result.geographicContext().country()).isEqualTo("Country");
         assertThat(result.weather().tempC()).isEqualTo(18.0);
         assertThat(result.satellite().hasRecentScene()).isFalse();
+        assertThat(result.water().occurrenceClass()).isEqualTo("None");
+        assertThat(result.terrain().terrainClass()).isEqualTo("Unknown");
         assertThat(result.landCover().hasData()).isFalse();
 
-        verifyNoInteractions(gbif, soil, gfw, geocoding, weather, sentinel, dynamicWorld);
+        verifyNoInteractions(gbif, soil, gfw, geocoding, weather, sentinel, geoEngine, dynamicWorld);
     }
 
     private void mockCacheHit(InsightsCacheRepository cacheRepo, UUID patchId, String layer, String payload) {
